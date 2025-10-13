@@ -1,0 +1,12 @@
+{
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "angular.experimental-ivy": true,
+  "html.customData": ["./node_modules/@ionic/angular/dist/collection.json"],
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.useAliasesForRenames": false,
+  "typescript.surveys.enabled": false,
+  "typescript.suggest.completeFunctionCalls": true
+}

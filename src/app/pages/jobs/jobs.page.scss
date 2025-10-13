@@ -1,0 +1,85 @@
+.job-card {
+  margin: 8px 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.route-info {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  
+  ion-icon {
+    margin-right: 8px;
+    margin-top: 4px;
+  }
+  
+  .route-text {
+    flex: 1;
+    
+    p {
+      margin: 2px 0;
+      font-size: 14px;
+    }
+  }
+}
+
+.job-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+  
+  ion-chip {
+    margin: 0;
+  }
+}
+
+.cargo-info {
+  margin: 12px 0;
+  
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: var(--ion-color-medium);
+  }
+}
+
+.description {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin: 12px 0;
+  line-height: 1.4;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  
+  ion-button {
+    flex: 1;
+    margin: 0 4px;
+  }
+}
+
+.no-jobs {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ion-color-medium);
+  
+  ion-icon {
+    margin-bottom: 16px;
+  }
+  
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
+}
+
+ion-searchbar {
+  --background: var(--ion-color-light);
+  --border-radius: 8px;
+  margin: 8px 16px;
+}

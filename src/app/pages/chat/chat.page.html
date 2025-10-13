@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Conversaciones
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Conversaciones</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let conversation of conversations">
+      <ion-item button (click)="openChat(conversation)">
+        <ion-avatar slot="start">
+          <ion-icon name="person-circle" size="large" color="primary"></ion-icon>
+        </ion-avatar>
+        
+        <ion-label>
+          <h2>{{ conversation.clientName }}</h2>
+          <h3>{{ conversation.clientCompany }}</h3>
+          <p>{{ conversation.jobTitle }}</p>
+          <p class="last-message">{{ conversation.lastMessage }}</p>
+        </ion-label>
+        
+        <div slot="end" class="conversation-meta">
+          <span class="time">{{ getTimeAgo(conversation.lastMessageTime) }}</span>
+          <ion-badge 
+            *ngIf="conversation.unreadCount > 0" 
+            color="danger">
+            {{ conversation.unreadCount }}
+          </ion-badge>
+          <ion-chip 
+            [color]="conversation.status === 'active' ? 'success' : 'medium'"
+            size="small">
+            <ion-label>{{ conversation.status === 'active' ? 'Activo' : 'Completado' }}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-item>
+      
+      <ion-item-options side="end">
+        <ion-item-option color="primary">
+          <ion-icon name="call" slot="icon-only"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger">
+          <ion-icon name="trash" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <!-- Mensaje cuando no hay conversaciones -->
+  <div *ngIf="conversations.length === 0" class="empty-state">
+    <ion-icon name="chatbubbles-outline" size="large" color="medium"></ion-icon>
+    <h3>No hay conversaciones</h3>
+    <p>Las conversaciones aparecerán cuando aceptes trabajos</p>
+  </div>
+
+</ion-content>

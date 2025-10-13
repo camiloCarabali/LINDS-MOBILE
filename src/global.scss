@@ -1,0 +1,107 @@
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+/* Global Styles */
+* {
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.p-16 {
+  padding: 16px;
+}
+
+/* Custom animation for page transitions */
+.page-transition-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.page-transition-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.page-transition-leave {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.page-transition-leave-active {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Custom scroll animations */
+ion-content {
+  --overflow: hidden;
+  
+  &.ios {
+    --padding-top: 20px;
+  }
+}
+
+/* Mejoras para scroll en navegadores de escritorio */
+@media (min-width: 768px) {
+  ion-content {
+    --overflow: auto;
+  }
+  
+  /* Personalizar scrollbar para navegadores webkit */
+  ion-content::part(scroll) {
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--ion-color-light);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--ion-color-medium);
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--ion-color-dark);
+    }
+  }
+}
