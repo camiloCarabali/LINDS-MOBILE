@@ -22,8 +22,8 @@
         
         <ion-label>
           <h2>{{ conversation.client_name || 'Cliente' }}</h2>
-          <h3>Trabajo #{{ conversation.job_id }}</h3>
-          <p class="last-message">{{ conversation.last_message || 'Sin mensajes' }}</p>
+          <h3>Trabajo #{{ conversation.envio_id }}</h3>
+          <p class="last-message">{{ conversation.last_message?.content || 'Sin mensajes' }}</p>
         </ion-label>
         
         <div slot="end" class="conversation-meta">

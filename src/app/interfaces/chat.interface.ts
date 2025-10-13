@@ -67,12 +67,13 @@ export interface BackendChatMessage {
 
 export interface BackendChatConversation {
   id: number;
-  job_id: number;
+  envio_id: number;
   client_id: string;
   client_name: string;
   driver_id: string;
   driver_name: string;
-  last_message?: string;
+  status: string;
+  last_message?: BackendChatMessage;
   unread_count: number;
   created_at: string;
   updated_at: string;

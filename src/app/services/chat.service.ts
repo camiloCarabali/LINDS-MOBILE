@@ -152,7 +152,7 @@ export class ChatService {
       if (conv.id === conversationId) {
         return {
           ...conv,
-          last_message: message.content,
+          last_message: message,
           updated_at: message.created_at
         };
       }

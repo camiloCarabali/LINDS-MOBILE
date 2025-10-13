@@ -22,8 +22,8 @@
   <ion-list>
     <ion-card *ngFor="let job of filteredJobs" class="job-card">
       <ion-card-header>
-        <ion-card-subtitle>{{ job.company_name || 'Empresa' }}</ion-card-subtitle>
         <ion-card-title>{{ job.titulo }}</ion-card-title>
+        <ion-card-subtitle>{{ job.tipo_carga }}</ion-card-subtitle>
       </ion-card-header>
 
       <ion-card-content>
