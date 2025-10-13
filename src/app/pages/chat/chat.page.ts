@@ -1,65 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-
-export interface ChatMessage {
-  id: string;
-  sender: 'driver' | 'client';
-  message: string;
-  timestamp: Date;
-  type: 'text' | 'location' | 'image';
-}
-
-export interface ChatConversation {
-  id: string;
-  jobTitle: string;
-  clientName: string;
-  clientCompany: string;
-  lastMessage: string;
-  lastMessageTime: Date;
-  unreadCount: number;
-  status: 'active' | 'completed';
-}
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ChatService } from '../../services';
+import { BackendChatConversation, LoadingState } from '../../interfaces';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit, OnDestroy {
 
-  conversations: ChatConversation[] = [
-    {
-      id: '1',
-      jobTitle: 'Transporte de Mercancía General',
-      clientName: 'Carlos Rodríguez',
-      clientCompany: 'Logística Express SA',
-      lastMessage: 'Confirma cuando llegues al punto de carga',
-      lastMessageTime: new Date('2025-10-12T14:30:00'),
-      unreadCount: 2,
-      status: 'active'
-    },
-    {
-      id: '2',
-      jobTitle: 'Entrega de Materiales de Construcción',
-      clientName: 'Ana García',
-      clientCompany: 'Construcciones del Valle',
-      lastMessage: 'Gracias por la entrega. Todo perfecto!',
-      lastMessageTime: new Date('2025-10-11T16:45:00'),
-      unreadCount: 0,
-      status: 'completed'
-    }
-  ];
+  conversations: BackendChatConversation[] = [];
+  loadingState: LoadingState = { isLoading: false };
+  
+  private destroy$ = new Subject<void>();
 
-  constructor() { }
+  constructor(private chatService: ChatService) { }
 
   ngOnInit() {
+    this.initializeData();
   }
 
-  openChat(conversation: ChatConversation) {
-    console.log('Abriendo chat con:', conversation.clientName);
-    // Navegación al chat específico
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  getTimeAgo(date: Date): string {
+  private initializeData(): void {
+    this.chatService.conversations$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(conversations => {
+        this.conversations = conversations;
+      });
+
+    this.chatService.loadingState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(loadingState => {
+        this.loadingState = loadingState;
+      });
+
+    this.chatService.getConversations().subscribe();
+  }
+
+  openChat(conversation: BackendChatConversation): void {
+    this.chatService.setActiveConversation(conversation);
+  }
+
+  getTimeAgo(dateString: string): string {
+    const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     
@@ -73,4 +62,7 @@ export class ChatPage implements OnInit {
     }
   }
 
+  refreshConversations(): void {
+    this.chatService.getConversations().subscribe();
+  }
 }

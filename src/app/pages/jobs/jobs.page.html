@@ -13,53 +13,46 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- Barra de búsqueda -->
   <ion-searchbar 
     placeholder="Buscar trabajos..." 
     (ionInput)="filterJobs($event)"
     show-clear-button="focus">
   </ion-searchbar>
 
-  <!-- Lista de trabajos -->
   <ion-list>
     <ion-card *ngFor="let job of filteredJobs" class="job-card">
       <ion-card-header>
-        <ion-card-subtitle>{{ job.company }}</ion-card-subtitle>
-        <ion-card-title>{{ job.title }}</ion-card-title>
+        <ion-card-subtitle>{{ job.company_name || 'Empresa' }}</ion-card-subtitle>
+        <ion-card-title>{{ job.titulo }}</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
         <div class="route-info">
           <ion-icon name="location-outline" color="primary"></ion-icon>
           <div class="route-text">
-            <p><strong>Origen:</strong> {{ job.origin }}</p>
-            <p><strong>Destino:</strong> {{ job.destination }}</p>
+            <p><strong>Origen:</strong> {{ job.origen }}</p>
+            <p><strong>Destino:</strong> {{ job.destino }}</p>
           </div>
         </div>
 
         <div class="job-details">
           <ion-chip color="secondary">
-            <ion-icon name="speedometer-outline"></ion-icon>
-            <ion-label>{{ job.distance }}</ion-label>
+            <ion-icon name="cube-outline"></ion-icon>
+            <ion-label>{{ job.tipo_carga }}</ion-label>
           </ion-chip>
 
           <ion-chip color="success">
             <ion-icon name="cash-outline"></ion-icon>
-            <ion-label>${{ job.payment.toLocaleString() }}</ion-label>
+            <ion-label>{{ getPaymentText(job) }}</ion-label>
           </ion-chip>
 
           <ion-chip color="warning">
-            <ion-icon name="time-outline"></ion-icon>
-            <ion-label>{{ job.deadline | date:'short' }}</ion-label>
+            <ion-icon name="scale-outline"></ion-icon>
+            <ion-label>{{ job.peso }}kg</ion-label>
           </ion-chip>
         </div>
 
-        <div class="cargo-info">
-          <p><strong>Carga:</strong> {{ job.cargo }}</p>
-          <p><strong>Peso:</strong> {{ job.weight }}</p>
-        </div>
-
-        <p class="description">{{ job.description }}</p>
+        <p class="description">{{ job.descripcion }}</p>
 
         <div class="action-buttons">
           <ion-button 
@@ -73,6 +66,7 @@
           <ion-button 
             color="primary" 
             size="small" 
+            [disabled]="loadingState.isLoading"
             (click)="applyForJob(job)">
             <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
             Aplicar
@@ -81,16 +75,14 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Mensaje cuando no hay trabajos -->
     <div *ngIf="filteredJobs.length === 0" class="no-jobs">
       <ion-icon name="briefcase-outline" size="large" color="medium"></ion-icon>
       <p>No se encontraron trabajos disponibles</p>
     </div>
   </ion-list>
 
-  <!-- Botón flotante para refrescar -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary">
+    <ion-fab-button color="primary" (click)="refreshJobs()" [disabled]="loadingState.isLoading">
       <ion-icon name="refresh-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>

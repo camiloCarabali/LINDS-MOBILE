@@ -31,7 +31,6 @@ export class ActiveJobPage implements OnInit {
   startNavigation() {
     this.isNavigating = true;
     console.log('Iniciando navegación...');
-    // Aquí se integraría con servicio de mapas
   }
 
   stopNavigation() {
@@ -45,17 +44,14 @@ export class ActiveJobPage implements OnInit {
 
   callClient() {
     console.log('Llamando al cliente...');
-    // Implementar llamada
   }
 
   reportIssue() {
     console.log('Reportando problema...');
-    // Implementar reporte de problemas
   }
 
   completeJob() {
     console.log('Completando trabajo...');
-    // Implementar finalización del trabajo
   }
 
 }

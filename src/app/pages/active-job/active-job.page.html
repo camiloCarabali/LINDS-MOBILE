@@ -13,7 +13,6 @@
 
 <ion-content [fullscreen]="true">
   
-  <!-- Contenedor del Mapa -->
   <div class="map-container">
     <div class="map-placeholder">
       <ion-icon name="map-outline" size="large" color="medium"></ion-icon>
@@ -21,14 +20,12 @@
       <p class="location-text">Ubicación actual: {{ activeJob.currentLocation }}</p>
     </div>
     
-    <!-- Overlay con progreso -->
     <div class="progress-overlay">
       <ion-progress-bar value="{{ activeJob.progress / 100 }}" color="success"></ion-progress-bar>
       <span class="progress-text">{{ activeJob.progress }}% completado</span>
     </div>
   </div>
 
-  <!-- Información del trabajo (colapsible) -->
   <ion-card *ngIf="showJobInfo" class="job-info-card">
     <ion-card-header>
       <ion-card-subtitle>{{ activeJob.company }}</ion-card-subtitle>
@@ -64,7 +61,6 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Controles de navegación -->
   <div class="navigation-controls">
     <ion-button 
       *ngIf="!isNavigating" 
@@ -87,7 +83,6 @@
     </ion-button>
   </div>
 
-  <!-- Botones de acción -->
   <div class="action-buttons">
     <ion-button fill="outline" (click)="callClient()">
       <ion-icon name="call-outline" slot="start"></ion-icon>
@@ -105,7 +100,6 @@
     </ion-button>
   </div>
 
-  <!-- Botón flotante para ubicación actual -->
   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
     <ion-fab-button color="secondary" size="small">
       <ion-icon name="locate-outline"></ion-icon>
