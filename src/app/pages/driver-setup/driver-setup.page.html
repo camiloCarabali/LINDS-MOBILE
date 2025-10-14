@@ -1,0 +1,237 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Completar Perfil de Conductor</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="setup-container">
+    <!-- Progress Bar -->
+    <ion-progress-bar [value]="progress" color="success"></ion-progress-bar>
+    
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <span class="step-text">Paso {{ currentStep }} de 3</span>
+    </div>
+
+    <!-- Slides Container -->
+    <div [ngSwitch]="currentStep">
+      
+      <!-- PASO 1: Información del Vehículo -->
+      <div *ngSwitchCase="1" class="step-content">
+        <div class="step-header">
+          <ion-icon name="car-sport" class="step-icon"></ion-icon>
+          <h2>Información del Vehículo</h2>
+          <p>Cuéntanos sobre tu vehículo de trabajo</p>
+        </div>
+
+        <form>
+          <ion-item>
+            <ion-label position="floating">Tipo de Vehículo *</ion-label>
+            <ion-select [(ngModel)]="formData.vehicle_type" name="vehicle_type" interface="action-sheet" required>
+              <ion-select-option value="Camioneta">Camioneta</ion-select-option>
+              <ion-select-option value="Camión 3.5 ton">Camión 3.5 ton</ion-select-option>
+              <ion-select-option value="Camión 5 ton">Camión 5 ton</ion-select-option>
+              <ion-select-option value="Furgón">Furgón</ion-select-option>
+              <ion-select-option value="Van">Van</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Placa del Vehículo *</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.vehicle_plate" 
+              name="vehicle_plate"
+              type="text" 
+              placeholder="ABC-123"
+              maxlength="20"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Capacidad de Carga (kg) *</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.vehicle_capacity_kg" 
+              name="vehicle_capacity_kg"
+              type="number" 
+              placeholder="1000"
+              min="1"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Año del Vehículo</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.vehicle_year" 
+              name="vehicle_year"
+              type="number" 
+              placeholder="2020"
+              min="1990"
+              max="2025">
+            </ion-input>
+          </ion-item>
+
+          <!-- Foto del Vehículo (opcional por ahora) -->
+          <div class="photo-section" *ngIf="false">
+            <ion-button expand="block" fill="outline" (click)="takeVehiclePhoto()">
+              <ion-icon name="camera" slot="start"></ion-icon>
+              Foto del Vehículo
+            </ion-button>
+            <img *ngIf="formData.vehicle_photo_url" [src]="formData.vehicle_photo_url" class="preview-image">
+          </div>
+        </form>
+
+        <div class="button-container">
+          <ion-button expand="block" (click)="nextStep()" [disabled]="!isStep1Valid()">
+            Siguiente
+            <ion-icon name="arrow-forward" slot="end"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- PASO 2: Licencia de Conducir -->
+      <div *ngSwitchCase="2" class="step-content">
+        <div class="step-header">
+          <ion-icon name="card" class="step-icon"></ion-icon>
+          <h2>Licencia de Conducir</h2>
+          <p>Información de tu licencia profesional</p>
+        </div>
+
+        <form>
+          <ion-item>
+            <ion-label position="floating">Número de Licencia *</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.license_number" 
+              name="license_number"
+              type="text" 
+              placeholder="12345678"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Categoría *</ion-label>
+            <ion-select [(ngModel)]="formData.license_category" name="license_category" interface="action-sheet" required>
+              <ion-select-option value="A1">A1 - Motocicleta</ion-select-option>
+              <ion-select-option value="A2">A2 - Motocicleta</ion-select-option>
+              <ion-select-option value="B1">B1 - Automóvil</ion-select-option>
+              <ion-select-option value="B2">B2 - Camioneta</ion-select-option>
+              <ion-select-option value="C1">C1 - Camión</ion-select-option>
+              <ion-select-option value="C2">C2 - Camión pesado</ion-select-option>
+              <ion-select-option value="C3">C3 - Articulado</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Fecha de Vencimiento de Licencia *</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.license_expiry_date" 
+              name="license_expiry_date"
+              type="date" 
+              [min]="minDateString"
+              [max]="maxDateString"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <!-- Foto de la Licencia (opcional por ahora) -->
+          <div class="photo-section" *ngIf="false">
+            <ion-button expand="block" fill="outline" (click)="takeLicensePhoto()">
+              <ion-icon name="camera" slot="start"></ion-icon>
+              Foto de la Licencia
+            </ion-button>
+            <img *ngIf="formData.license_photo_url" [src]="formData.license_photo_url" class="preview-image">
+          </div>
+        </form>
+
+        <div class="button-container">
+          <ion-button expand="block" fill="outline" (click)="previousStep()">
+            <ion-icon name="arrow-back" slot="start"></ion-icon>
+            Anterior
+          </ion-button>
+          <ion-button expand="block" (click)="nextStep()" [disabled]="!isStep2Valid()">
+            Siguiente
+            <ion-icon name="arrow-forward" slot="end"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- PASO 3: Información Adicional -->
+      <div *ngSwitchCase="3" class="step-content">
+        <div class="step-header">
+          <ion-icon name="person" class="step-icon"></ion-icon>
+          <h2>Información Adicional</h2>
+          <p>Últimos detalles sobre tu perfil</p>
+        </div>
+
+        <form>
+          <ion-item>
+            <ion-label position="floating">Teléfono *</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.phone" 
+              name="phone"
+              type="tel" 
+              placeholder="3001234567"
+              maxlength="20"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Ciudad Base *</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.city" 
+              name="city"
+              type="text" 
+              placeholder="Bogotá"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Años de Experiencia</ion-label>
+            <ion-input 
+              [(ngModel)]="formData.years_experience" 
+              name="years_experience"
+              type="number" 
+              placeholder="5"
+              min="0"
+              max="50">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Descripción (Opcional)</ion-label>
+            <ion-textarea 
+              [(ngModel)]="formData.description" 
+              name="description"
+              placeholder="Cuéntanos sobre tu experiencia como conductor..."
+              rows="4"
+              maxlength="500">
+            </ion-textarea>
+          </ion-item>
+        </form>
+
+        <div class="button-container">
+          <ion-button expand="block" fill="outline" (click)="previousStep()">
+            <ion-icon name="arrow-back" slot="start"></ion-icon>
+            Anterior
+          </ion-button>
+          <ion-button 
+            expand="block" 
+            color="success" 
+            (click)="submitProfile()" 
+            [disabled]="!isStep3Valid() || isSubmitting">
+            <ion-spinner *ngIf="isSubmitting" name="crescent"></ion-spinner>
+            <span *ngIf="!isSubmitting">
+              <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+              Completar Registro
+            </span>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

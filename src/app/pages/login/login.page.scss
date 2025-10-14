@@ -1,0 +1,94 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 40px;
+
+  .logo-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    color: var(--ion-color-primary);
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+.benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 40px;
+
+  .benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--ion-color-light);
+    border-radius: 12px;
+
+    ion-icon {
+      font-size: 28px;
+    }
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}
+
+.login-section {
+  margin-top: auto;
+
+  .google-btn {
+    --background: #ffffff;
+    --color: #000000;
+    --border-radius: 12px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-weight: 600;
+
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+
+  .terms {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+
+    a {
+      color: var(--ion-color-primary);
+      text-decoration: none;
+    }
+  }
+}
+
+.error-message {
+  margin-top: 20px;
+  text-align: center;
+  
+  p {
+    font-size: 14px;
+    margin: 0;
+  }
+}

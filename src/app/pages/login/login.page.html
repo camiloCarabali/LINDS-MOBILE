@@ -1,0 +1,52 @@
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <!-- Logo y Bienvenida -->
+    <div class="header-section">
+      <ion-icon name="car-sport" color="primary" class="logo-icon"></ion-icon>
+      <h1>LINDS Driver</h1>
+      <p class="subtitle">Encuentra trabajos de transporte cerca de ti</p>
+    </div>
+
+    <!-- Beneficios -->
+    <div class="benefits">
+      <div class="benefit-item">
+        <ion-icon name="cash-outline" color="success"></ion-icon>
+        <span>Gana dinero extra</span>
+      </div>
+      <div class="benefit-item">
+        <ion-icon name="calendar-outline" color="primary"></ion-icon>
+        <span>Horarios flexibles</span>
+      </div>
+      <div class="benefit-item">
+        <ion-icon name="shield-checkmark-outline" color="tertiary"></ion-icon>
+        <span>Pagos seguros</span>
+      </div>
+    </div>
+
+    <!-- Botón de Login con Google -->
+    <div class="login-section">
+      <ion-button 
+        expand="block" 
+        size="large" 
+        (click)="signInWithGoogle()"
+        [disabled]="isLoading"
+        class="google-btn">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        {{ isLoading ? 'Iniciando sesión...' : 'Continuar con Google' }}
+      </ion-button>
+
+      <ion-text color="medium" class="terms">
+        <p>
+          Al continuar, aceptas nuestros 
+          <a href="#">Términos y Condiciones</a> y 
+          <a href="#">Política de Privacidad</a>
+        </p>
+      </ion-text>
+    </div>
+
+    <!-- Mensaje de error -->
+    <ion-text color="danger" *ngIf="errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+    </ion-text>
+  </div>
+</ion-content>
