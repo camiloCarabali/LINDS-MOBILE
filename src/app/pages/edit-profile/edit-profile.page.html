@@ -1,0 +1,172 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando perfil...</p>
+  </div>
+
+  <!-- Edit Form -->
+  <div *ngIf="!isLoading && profile" class="form-container">
+    
+    <!-- Información del Vehículo -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="car-outline" color="primary"></ion-icon>
+          Información del Vehículo
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Tipo de Vehículo *</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.vehicle_type" 
+            placeholder="Ej: Camión NHR"
+            type="text">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Placa *</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.vehicle_plate" 
+            placeholder="Ej: ABC123"
+            type="text">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Capacidad de Carga (kg) *</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.vehicle_capacity_kg" 
+            placeholder="Ej: 3000"
+            type="number">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Año del Vehículo</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.vehicle_year" 
+            placeholder="Ej: 2020"
+            type="number"
+            min="1900"
+            max="2100">
+          </ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Información de Licencia -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="card-outline" color="primary"></ion-icon>
+          Licencia de Conducir
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Número de Licencia *</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.license_number" 
+            placeholder="Ej: 12345678"
+            type="text">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Categoría *</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.license_category" 
+            placeholder="Ej: C2"
+            type="text">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Fecha de Expiración *</ion-label>
+          <ion-datetime 
+            [(ngModel)]="formData.license_expiry_date"
+            presentation="date"
+            [min]="getTodayDate()"
+            placeholder="Selecciona una fecha">
+          </ion-datetime>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Información Personal -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="person-outline" color="primary"></ion-icon>
+          Información Personal
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Teléfono *</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.phone" 
+            placeholder="Ej: +57 300 123 4567"
+            type="tel">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Ciudad *</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.city" 
+            placeholder="Ej: Bogotá"
+            type="text">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Años de Experiencia</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.years_experience" 
+            placeholder="Ej: 5"
+            type="number"
+            min="0"
+            max="50">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Descripción</ion-label>
+          <ion-textarea 
+            [(ngModel)]="formData.description" 
+            placeholder="Cuéntanos sobre tu experiencia como conductor..."
+            rows="4"
+            maxlength="500">
+          </ion-textarea>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botones de Acción -->
+    <div class="action-buttons">
+      <ion-button expand="block" (click)="saveChanges()" color="primary">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        Guardar Cambios
+      </ion-button>
+      
+      <ion-button expand="block" (click)="cancel()" fill="outline" color="medium">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

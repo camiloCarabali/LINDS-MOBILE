@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'envios-disponibles',
     loadChildren: () => import('./pages/envios-disponibles/envios-disponibles.module').then( m => m.EnviosDisponiblesPageModule)
+  },
+  {
+    path: 'edit-profile',
+    loadChildren: () => import('./pages/edit-profile/edit-profile.module').then( m => m.EditProfilePageModule)
   }
 
 ];

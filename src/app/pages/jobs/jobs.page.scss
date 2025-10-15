@@ -1,172 +1,91 @@
-.envios-container {.job-card {
+// Container principal
+.envios-container {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-  padding: 16px;  margin: 8px 16px;
-
-  max-width: 800px;  border-radius: 12px;
-
-  margin: 0 auto;  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-}}
-
-
-
-// Empty State.route-info {
-
-.empty-state {  display: flex;
-
-  display: flex;  align-items: flex-start;
-
-  flex-direction: column;  margin-bottom: 12px;
-
-  align-items: center;  
-
-  justify-content: center;  ion-icon {
-
-  padding: 60px 20px;    margin-right: 8px;
-
-  text-align: center;    margin-top: 4px;
-
-  }
-
-  .empty-icon {  
-
-    font-size: 80px;  .route-text {
-
-    color: var(--ion-color-medium);    flex: 1;
-
-    margin-bottom: 20px;    
-
-  }    p {
-
-      margin: 2px 0;
-
-  h2 {      font-size: 14px;
-
-    color: var(--ion-color-dark);    }
-
-    font-size: 20px;  }
-
-    font-weight: 600;}
-
-    margin: 0 0 10px 0;
-
-  }.job-details {
-
+// Empty State - Centrado en toda la pantalla
+.empty-state {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 20px;
+  text-align: center;
 
-  p {  flex-wrap: wrap;
-
-    color: var(--ion-color-medium);  gap: 8px;
-
-    font-size: 14px;  margin: 12px 0;
-
-    margin: 0 0 24px 0;  
-
-  }  ion-chip {
-
-}    margin: 0;
-
+  .empty-icon {
+    font-size: 100px;
+    color: var(--ion-color-medium);
+    margin-bottom: 24px;
   }
 
-// Envío Card}
+  h2 {
+    color: var(--ion-color-dark);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+  }
 
+  p {
+    color: var(--ion-color-medium);
+    font-size: 15px;
+    margin: 0;
+    max-width: 300px;
+  }
+}
+
+// Envío Card
 .envio-card {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 
-  margin-bottom: 16px;.cargo-info {
-
-  border-radius: 12px;  margin: 12px 0;
-
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  
-
-  cursor: pointer;  p {
-
-  transition: transform 0.2s, box-shadow 0.2s;    margin: 4px 0;
-
-    font-size: 14px;
-
-  &:active {    color: var(--ion-color-medium);
-
-    transform: scale(0.98);  }
-
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);}
-
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   }
+}
 
-}.description {
-
-  font-size: 14px;
-
-// Route Header  color: var(--ion-color-medium);
-
-.route-header {  margin: 12px 0;
-
-  display: flex;  line-height: 1.4;
-
-  align-items: center;}
-
+// Route Header
+.route-header {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
 
-  gap: 12px;.action-buttons {
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
 
-  padding: 4px 0;  display: flex;
-
-  justify-content: space-between;
-
-  .location {  margin-top: 16px;
-
-    display: flex;  
-
-    align-items: center;  ion-button {
-
-    gap: 8px;    flex: 1;
-
-    flex: 1;    margin: 0 4px;
-
-  }
-
-    ion-icon {}
-
+    ion-icon {
       font-size: 24px;
+      flex-shrink: 0;
+    }
 
-      flex-shrink: 0;.no-jobs {
+    .location-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
 
-    }  text-align: center;
-
-  padding: 40px 20px;
-
-    .location-info {  color: var(--ion-color-medium);
-
-      display: flex;  
-
-      flex-direction: column;  ion-icon {
-
-      min-width: 0;    margin-bottom: 16px;
-
-  }
-
-      .label {  
-
-        font-size: 11px;  p {
-
-        color: var(--ion-color-medium);    font-size: 16px;
-
-        text-transform: uppercase;    margin: 0;
-
-        letter-spacing: 0.5px;  }
-
-        font-weight: 500;}
-
+      .label {
+        font-size: 11px;
+        color: var(--ion-color-medium);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
       }
 
-ion-searchbar {
-
-      .city {  --background: var(--ion-color-light);
-
-        font-size: 14px;  --border-radius: 8px;
-
-        font-weight: 600;  margin: 8px 16px;
-
-        color: var(--ion-color-dark);}
+      .city {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -271,6 +190,13 @@ ion-searchbar {
   font-weight: 600;
   --border-radius: 8px;
   height: 44px;
+}
+
+// Searchbar
+ion-searchbar {
+  --background: var(--ion-color-light);
+  --border-radius: 8px;
+  margin: 8px 16px;
 }
 
 // Responsive adjustments

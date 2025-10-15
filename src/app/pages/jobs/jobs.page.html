@@ -29,10 +29,6 @@
       <ion-icon name="cube-outline" class="empty-icon"></ion-icon>
       <h2>No hay envíos disponibles</h2>
       <p>Por el momento no hay envíos que coincidan con tu búsqueda.</p>
-      <ion-button (click)="refreshJobs()" fill="outline">
-        <ion-icon name="refresh" slot="start"></ion-icon>
-        Actualizar
-      </ion-button>
     </div>
 
     <ion-card *ngFor="let envio of enviosFiltrados" (click)="viewJobDetails(envio)" class="envio-card">

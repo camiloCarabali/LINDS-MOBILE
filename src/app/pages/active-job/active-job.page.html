@@ -29,11 +29,8 @@
   <!-- Active job view -->
   <div *ngIf="!isLoading && activeJob">
     <div class="map-container">
-      <div class="map-placeholder">
-        <ion-icon name="map-outline" size="large" color="medium"></ion-icon>
-        <p>Mapa de navegación</p>
-        <p class="location-text">Ruta: {{ activeJob.origen }} → {{ activeJob.destino }}</p>
-      </div>
+      <!-- Mapa real de Google Maps -->
+      <div #mapElement class="map-element"></div>
       
       <div class="progress-overlay">
         <ion-progress-bar value="0.5" color="success"></ion-progress-bar>
@@ -122,7 +119,7 @@
     </div>
 
     <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-      <ion-fab-button color="secondary" size="small">
+      <ion-fab-button color="secondary" size="small" (click)="centerMap()">
         <ion-icon name="locate-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>

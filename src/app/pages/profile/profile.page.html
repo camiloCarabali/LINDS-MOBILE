@@ -18,96 +18,161 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card class="profile-card">
-    <ion-card-content>
-      <div class="profile-header">
-        <ion-avatar size="large">
-          <ion-icon name="person" size="large"></ion-icon>
-        </ion-avatar>
-        <div class="profile-info">
-          <h2>{{ driver.name }}</h2>
-          <p>{{ driver.email }}</p>
-          <div class="rating">
-            <ion-icon name="star" color="warning"></ion-icon>
-            <span>{{ driver.rating }}</span>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando perfil...</p>
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="!isLoading && driver">
+    <ion-card class="profile-card">
+      <ion-card-content>
+        <div class="profile-header">
+          <ion-avatar size="large">
+            <img *ngIf="photoURL" [src]="photoURL" alt="Foto de perfil" />
+            <ion-icon *ngIf="!photoURL" name="person" size="large"></ion-icon>
+          </ion-avatar>
+          <div class="profile-info">
+            <h2>{{ currentUser?.name || currentUser?.nombre || 'Usuario' }}</h2>
+            <p>{{ currentUser?.email }}</p>
+            <div class="rating">
+              <ion-icon name="star" color="warning"></ion-icon>
+              <span>{{ driver.rating || 5.0 }}</span>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="profile-stats">
-        <div class="stat-item">
-          <h3>{{ driver.totalJobs }}</h3>
-          <p>Trabajos Completados</p>
+        
+        <div class="profile-stats">
+          <div class="stat-item">
+            <h3>{{ driver.completed_trips || 0 }}</h3>
+            <p>Trabajos Completados</p>
+          </div>
+          <div class="stat-item">
+            <h3>{{ driver.years_experience || 0 }}</h3>
+            <p>Años de Experiencia</p>
+          </div>
+          <div class="stat-item">
+            <h3>{{ (driver.vehicle_capacity_kg / 1000).toFixed(1) || 'N/A' }}</h3>
+            <p>Capacidad (Ton)</p>
+          </div>
         </div>
-        <div class="stat-item">
-          <h3>${{ (driver.totalEarnings / 1000000).toFixed(1) }}M</h3>
-          <p>Ganancias Totales</p>
-        </div>
-        <div class="stat-item">
-          <h3>{{ getExperienceYears() }}</h3>
-          <p>Años de Experiencia</p>
-        </div>
-      </div>
-    </ion-card-content>
-  </ion-card>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="car-outline" color="primary"></ion-icon>
-        Información del Vehículo
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item lines="none">
-        <ion-label>
-          <h3>Tipo de Vehículo</h3>
-          <p>{{ driver.vehicleType }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-label>
-          <h3>Placa</h3>
-          <p>{{ driver.plateNumber }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-label>
-          <h3>Licencia de Conducir</h3>
-          <p>{{ driver.license }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="person-outline" color="primary"></ion-icon>
+          Información Personal
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Teléfono</h3>
+            <p>{{ driver.phone || 'No especificado' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Ciudad</h3>
+            <p>{{ driver.city || 'No especificada' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" *ngIf="driver.description">
+          <ion-label>
+            <h3>Descripción</h3>
+            <p>{{ driver.description }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="card-outline" color="primary"></ion-icon>
-        Métodos de Pago
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item *ngFor="let method of paymentMethods" lines="none">
-        <ion-icon name="card" slot="start" color="primary"></ion-icon>
-        <ion-label>
-          <h3>{{ method.type }}</h3>
-          <p>{{ method.info }}</p>
-        </ion-label>
-        <ion-chip *ngIf="method.default" color="success" slot="end">
-          <ion-label>Principal</ion-label>
-        </ion-chip>
-      </ion-item>
-      
-      <ion-button 
-        fill="clear" 
-        expand="block" 
-        (click)="addPaymentMethod()">
-        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-        Agregar Método de Pago
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="car-outline" color="primary"></ion-icon>
+          Información del Vehículo
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Tipo de Vehículo</h3>
+            <p>{{ driver.vehicle_type || 'No especificado' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Placa</h3>
+            <p>{{ driver.vehicle_plate || 'No especificada' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" *ngIf="driver.vehicle_year">
+          <ion-label>
+            <h3>Año del Vehículo</h3>
+            <p>{{ driver.vehicle_year }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Capacidad de Carga</h3>
+            <p>{{ (driver.vehicle_capacity_kg / 1000).toFixed(1) || 'No especificada' }} Toneladas</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="card-outline" color="primary"></ion-icon>
+          Licencia de Conducir
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Número de Licencia</h3>
+            <p>{{ driver.license_number || 'No especificado' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Categoría</h3>
+            <p>{{ driver.license_category || 'No especificada' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" *ngIf="driver.license_expiry_date">
+          <ion-label>
+            <h3>Fecha de Expiración</h3>
+            <p>{{ driver.license_expiry_date | date: 'dd/MM/yyyy' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Estado de Verificación</h3>
+            <p>
+              <ion-chip [color]="driver.is_verified ? 'success' : 'warning'">
+                <ion-label>{{ driver.is_verified ? 'Verificado' : 'Pendiente' }}</ion-label>
+              </ion-chip>
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- No Profile State -->
+  <div *ngIf="!isLoading && !driver" class="no-profile">
+    <ion-icon name="person-add-outline" color="medium"></ion-icon>
+    <h3>No tienes un perfil de conductor</h3>
+    <p>Completa tu perfil para empezar a recibir trabajos</p>
+    <ion-button expand="block" (click)="editProfile()">
+      Completar Perfil
+    </ion-button>
+  </div>
 
   <ion-list>
     <ion-item button (click)="viewPaymentHistory()">
