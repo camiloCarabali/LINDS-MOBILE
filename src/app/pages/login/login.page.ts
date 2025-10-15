@@ -93,15 +93,16 @@ export class LoginPage implements OnInit {
           await loading.dismiss();
           
           if (profile) {
-            // Tiene perfil completo, ir a la página principal
+            // Tiene perfil completo, ir a la página principal de tabs
             console.log('Driver has complete profile');
             await this.showSuccessAlert();
-            this.router.navigate(['/tabs/jobs']);
+            // Navegar a tabs/jobs con navigateByUrl
+            this.router.navigateByUrl('/tabs/jobs', { replaceUrl: true });
           } else {
             // No tiene perfil, ir al formulario de registro
             console.log('Driver needs to complete profile');
             await this.showWelcomeAlert();
-            this.router.navigate(['/driver-setup']);
+            this.router.navigateByUrl('/driver-setup', { replaceUrl: true });
           }
         },
         error: async (error) => {
@@ -109,7 +110,7 @@ export class LoginPage implements OnInit {
           await loading.dismiss();
           // En caso de error, ir al formulario de registro por seguridad
           await this.showWelcomeAlert();
-          this.router.navigate(['/driver-setup']);
+          this.router.navigateByUrl('/driver-setup', { replaceUrl: true });
         }
       });
 

@@ -1,85 +1,301 @@
-.job-card {
-  margin: 8px 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.envios-container {.job-card {
+
+  padding: 16px;  margin: 8px 16px;
+
+  max-width: 800px;  border-radius: 12px;
+
+  margin: 0 auto;  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+}}
+
+
+
+// Empty State.route-info {
+
+.empty-state {  display: flex;
+
+  display: flex;  align-items: flex-start;
+
+  flex-direction: column;  margin-bottom: 12px;
+
+  align-items: center;  
+
+  justify-content: center;  ion-icon {
+
+  padding: 60px 20px;    margin-right: 8px;
+
+  text-align: center;    margin-top: 4px;
+
+  }
+
+  .empty-icon {  
+
+    font-size: 80px;  .route-text {
+
+    color: var(--ion-color-medium);    flex: 1;
+
+    margin-bottom: 20px;    
+
+  }    p {
+
+      margin: 2px 0;
+
+  h2 {      font-size: 14px;
+
+    color: var(--ion-color-dark);    }
+
+    font-size: 20px;  }
+
+    font-weight: 600;}
+
+    margin: 0 0 10px 0;
+
+  }.job-details {
+
+  display: flex;
+
+  p {  flex-wrap: wrap;
+
+    color: var(--ion-color-medium);  gap: 8px;
+
+    font-size: 14px;  margin: 12px 0;
+
+    margin: 0 0 24px 0;  
+
+  }  ion-chip {
+
+}    margin: 0;
+
+  }
+
+// Envío Card}
+
+.envio-card {
+
+  margin-bottom: 16px;.cargo-info {
+
+  border-radius: 12px;  margin: 12px 0;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  
+
+  cursor: pointer;  p {
+
+  transition: transform 0.2s, box-shadow 0.2s;    margin: 4px 0;
+
+    font-size: 14px;
+
+  &:active {    color: var(--ion-color-medium);
+
+    transform: scale(0.98);  }
+
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);}
+
+  }
+
+}.description {
+
+  font-size: 14px;
+
+// Route Header  color: var(--ion-color-medium);
+
+.route-header {  margin: 12px 0;
+
+  display: flex;  line-height: 1.4;
+
+  align-items: center;}
+
+  justify-content: space-between;
+
+  gap: 12px;.action-buttons {
+
+  padding: 4px 0;  display: flex;
+
+  justify-content: space-between;
+
+  .location {  margin-top: 16px;
+
+    display: flex;  
+
+    align-items: center;  ion-button {
+
+    gap: 8px;    flex: 1;
+
+    flex: 1;    margin: 0 4px;
+
+  }
+
+    ion-icon {}
+
+      font-size: 24px;
+
+      flex-shrink: 0;.no-jobs {
+
+    }  text-align: center;
+
+  padding: 40px 20px;
+
+    .location-info {  color: var(--ion-color-medium);
+
+      display: flex;  
+
+      flex-direction: column;  ion-icon {
+
+      min-width: 0;    margin-bottom: 16px;
+
+  }
+
+      .label {  
+
+        font-size: 11px;  p {
+
+        color: var(--ion-color-medium);    font-size: 16px;
+
+        text-transform: uppercase;    margin: 0;
+
+        letter-spacing: 0.5px;  }
+
+        font-weight: 500;}
+
+      }
+
+ion-searchbar {
+
+      .city {  --background: var(--ion-color-light);
+
+        font-size: 14px;  --border-radius: 8px;
+
+        font-weight: 600;  margin: 8px 16px;
+
+        color: var(--ion-color-dark);}
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .arrow-icon {
+    font-size: 20px;
+    color: var(--ion-color-medium);
+    flex-shrink: 0;
+  }
 }
 
-.route-info {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  
-  ion-icon {
-    margin-right: 8px;
-    margin-top: 4px;
+// Info Grid
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ion-color-dark);
+
+    ion-icon {
+      font-size: 18px;
+    }
+
+    span {
+      font-weight: 500;
+    }
   }
-  
-  .route-text {
-    flex: 1;
-    
-    p {
-      margin: 2px 0;
+}
+
+// Descripción
+.descripcion {
+  font-size: 13px;
+  color: var(--ion-color-medium);
+  margin: 12px 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Badges
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+
+  ion-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 12px;
+
+    ion-icon {
       font-size: 14px;
     }
   }
 }
 
-.job-details {
+// Valor Container
+.valor-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0;
-  
-  ion-chip {
-    margin: 0;
-  }
-}
-
-.cargo-info {
-  margin: 12px 0;
-  
-  p {
-    margin: 4px 0;
-    font-size: 14px;
-    color: var(--ion-color-medium);
-  }
-}
-
-.description {
-  font-size: 14px;
-  color: var(--ion-color-medium);
-  margin: 12px 0;
-  line-height: 1.4;
-}
-
-.action-buttons {
-  display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-top: 16px;
-  
-  ion-button {
-    flex: 1;
-    margin: 0 4px;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--ion-color-success-tint) 0%, var(--ion-color-success) 100%);
+  border-radius: 8px;
+  margin: 16px 0;
+
+  .valor-label {
+    font-size: 13px;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .valor-amount {
+    font-size: 20px;
+    color: white;
+    font-weight: 700;
   }
 }
 
-.no-jobs {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--ion-color-medium);
-  
-  ion-icon {
-    margin-bottom: 16px;
-  }
-  
-  p {
-    font-size: 16px;
-    margin: 0;
-  }
-}
-
-ion-searchbar {
-  --background: var(--ion-color-light);
+// Botón Aplicar
+.aplicar-btn {
+  margin-top: 12px;
+  font-weight: 600;
   --border-radius: 8px;
-  margin: 8px 16px;
+  height: 44px;
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .route-header {
+    .location {
+      .location-info {
+        .city {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+// iOS specific adjustments
+ion-card-header {
+  padding-bottom: 8px;
+}
+
+ion-card-content {
+  padding-top: 8px;
 }

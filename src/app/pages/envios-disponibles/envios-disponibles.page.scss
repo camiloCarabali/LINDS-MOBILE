@@ -1,0 +1,217 @@
+.envios-container {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 80px;
+    color: var(--ion-color-medium);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    color: var(--ion-color-dark);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 14px;
+    margin: 0 0 24px 0;
+  }
+}
+
+// Envío Card
+.envio-card {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Route Header
+.route-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+
+    ion-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .location-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      .label {
+        font-size: 11px;
+        color: var(--ion-color-medium);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+      }
+
+      .city {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .arrow-icon {
+    font-size: 20px;
+    color: var(--ion-color-medium);
+    flex-shrink: 0;
+  }
+}
+
+// Info Grid
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ion-color-dark);
+
+    ion-icon {
+      font-size: 18px;
+    }
+
+    span {
+      font-weight: 500;
+    }
+  }
+}
+
+// Descripción
+.descripcion {
+  font-size: 13px;
+  color: var(--ion-color-medium);
+  margin: 12px 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Badges
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+
+  ion-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 12px;
+
+    ion-icon {
+      font-size: 14px;
+    }
+  }
+}
+
+// Valor Container
+.valor-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--ion-color-success-tint) 0%, var(--ion-color-success) 100%);
+  border-radius: 8px;
+  margin: 16px 0;
+
+  .valor-label {
+    font-size: 13px;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .valor-amount {
+    font-size: 20px;
+    color: white;
+    font-weight: 700;
+  }
+}
+
+// Botón Aplicar
+.aplicar-btn {
+  margin-top: 12px;
+  font-weight: 600;
+  --border-radius: 8px;
+  height: 44px;
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .route-header {
+    .location {
+      .location-info {
+        .city {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+// iOS specific adjustments
+ion-card-header {
+  padding-bottom: 8px;
+}
+
+ion-card-content {
+  padding-top: 8px;
+}

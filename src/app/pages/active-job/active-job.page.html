@@ -13,97 +13,119 @@
 
 <ion-content [fullscreen]="true">
   
-  <div class="map-container">
-    <div class="map-placeholder">
-      <ion-icon name="map-outline" size="large" color="medium"></ion-icon>
-      <p>Mapa de navegación</p>
-      <p class="location-text">Ubicación actual: {{ activeJob.currentLocation }}</p>
-    </div>
-    
-    <div class="progress-overlay">
-      <ion-progress-bar value="{{ activeJob.progress / 100 }}" color="success"></ion-progress-bar>
-      <span class="progress-text">{{ activeJob.progress }}% completado</span>
-    </div>
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Cargando trabajo activo...</p>
   </div>
 
-  <ion-card *ngIf="showJobInfo" class="job-info-card">
-    <ion-card-header>
-      <ion-card-subtitle>{{ activeJob.company }}</ion-card-subtitle>
-      <ion-card-title>{{ activeJob.title }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <div class="route-info">
-        <div class="route-point">
-          <ion-icon name="radio-button-on" color="success"></ion-icon>
-          <span>{{ activeJob.origin }}</span>
-        </div>
-        <div class="route-line"></div>
-        <div class="route-point">
-          <ion-icon name="location" color="danger"></ion-icon>
-          <span>{{ activeJob.destination }}</span>
-        </div>
+  <!-- No active job state -->
+  <div *ngIf="!isLoading && !activeJob" class="empty-state">
+    <ion-icon name="briefcase-outline" size="large" color="medium"></ion-icon>
+    <h2>No tienes trabajos activos</h2>
+    <p>Los trabajos aceptados aparecerán aquí</p>
+  </div>
+
+  <!-- Active job view -->
+  <div *ngIf="!isLoading && activeJob">
+    <div class="map-container">
+      <div class="map-placeholder">
+        <ion-icon name="map-outline" size="large" color="medium"></ion-icon>
+        <p>Mapa de navegación</p>
+        <p class="location-text">Ruta: {{ activeJob.origen }} → {{ activeJob.destino }}</p>
       </div>
       
-      <div class="trip-stats">
-        <ion-chip color="primary">
-          <ion-icon name="speedometer-outline"></ion-icon>
-          <ion-label>{{ activeJob.distance }}</ion-label>
-        </ion-chip>
-        <ion-chip color="secondary">
-          <ion-icon name="time-outline"></ion-icon>
-          <ion-label>{{ activeJob.estimatedTime }}</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-icon name="cash-outline"></ion-icon>
-          <ion-label>${{ activeJob.payment.toLocaleString() }}</ion-label>
-        </ion-chip>
+      <div class="progress-overlay">
+        <ion-progress-bar value="0.5" color="success"></ion-progress-bar>
+        <span class="progress-text">En proceso</span>
       </div>
-    </ion-card-content>
-  </ion-card>
+    </div>
 
-  <div class="navigation-controls">
-    <ion-button 
-      *ngIf="!isNavigating" 
-      expand="block" 
-      color="success" 
-      size="large"
-      (click)="startNavigation()">
-      <ion-icon name="navigate-outline" slot="start"></ion-icon>
-      Iniciar Navegación
-    </ion-button>
+    <ion-card *ngIf="showJobInfo" class="job-info-card">
+      <ion-card-header>
+        <ion-card-subtitle>Envío #{{ activeJob.id }}</ion-card-subtitle>
+        <ion-card-title>{{ activeJob.tipo_carga || 'Carga General' }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="route-info">
+          <div class="route-point">
+            <ion-icon name="radio-button-on" color="success"></ion-icon>
+            <span>{{ activeJob.origen }}</span>
+          </div>
+          <div class="route-line"></div>
+          <div class="route-point">
+            <ion-icon name="location" color="danger"></ion-icon>
+            <span>{{ activeJob.destino }}</span>
+          </div>
+        </div>
+        
+        <div class="trip-stats">
+          <ion-chip color="primary">
+            <ion-icon name="cube-outline"></ion-icon>
+            <ion-label>{{ activeJob.peso }} kg</ion-label>
+          </ion-chip>
+          <ion-chip color="secondary">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <ion-label>{{ activeJob.fecha | date:'shortDate' }}</ion-label>
+          </ion-chip>
+          <ion-chip color="success">
+            <ion-icon name="cash-outline"></ion-icon>
+            <ion-label>${{ activeJob.valor | number:'1.0-0' }}</ion-label>
+          </ion-chip>
+        </div>
 
-    <ion-button 
-      *ngIf="isNavigating" 
-      expand="block" 
-      color="warning" 
-      size="large"
-      (click)="stopNavigation()">
-      <ion-icon name="stop-outline" slot="start"></ion-icon>
-      Detener Navegación
-    </ion-button>
+        <div class="job-details">
+          <p><strong>Descripción:</strong> {{ activeJob.descripcion }}</p>
+          <p *ngIf="activeJob.observaciones"><strong>Observaciones:</strong> {{ activeJob.observaciones }}</p>
+          <p><strong>Vehículo requerido:</strong> {{ activeJob.vehiculo | titlecase }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="navigation-controls">
+      <ion-button 
+        *ngIf="!isNavigating" 
+        expand="block" 
+        color="success" 
+        size="large"
+        (click)="startNavigation()">
+        <ion-icon name="navigate-outline" slot="start"></ion-icon>
+        Iniciar Navegación
+      </ion-button>
+
+      <ion-button 
+        *ngIf="isNavigating" 
+        expand="block" 
+        color="warning" 
+        size="large"
+        (click)="stopNavigation()">
+        <ion-icon name="stop-outline" slot="start"></ion-icon>
+        Detener Navegación
+      </ion-button>
+    </div>
+
+    <div class="action-buttons">
+      <ion-button fill="outline" (click)="callClient()">
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        Llamar Cliente
+      </ion-button>
+
+      <ion-button fill="outline" color="warning" (click)="reportIssue()">
+        <ion-icon name="warning-outline" slot="start"></ion-icon>
+        Reportar Problema
+      </ion-button>
+
+      <ion-button color="success" (click)="completeJob()">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Completar Trabajo
+      </ion-button>
+    </div>
+
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab-button color="secondary" size="small">
+        <ion-icon name="locate-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
   </div>
-
-  <div class="action-buttons">
-    <ion-button fill="outline" (click)="callClient()">
-      <ion-icon name="call-outline" slot="start"></ion-icon>
-      Llamar Cliente
-    </ion-button>
-
-    <ion-button fill="outline" color="warning" (click)="reportIssue()">
-      <ion-icon name="warning-outline" slot="start"></ion-icon>
-      Reportar Problema
-    </ion-button>
-
-    <ion-button color="success" (click)="completeJob()">
-      <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-      Completar Trabajo
-    </ion-button>
-  </div>
-
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button color="secondary" size="small">
-      <ion-icon name="locate-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 
 </ion-content>

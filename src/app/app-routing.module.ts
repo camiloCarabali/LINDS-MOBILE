@@ -17,6 +17,10 @@ const routes: Routes = [
   },  {
     path: 'driver-setup',
     loadChildren: () => import('./pages/driver-setup/driver-setup.module').then( m => m.DriverSetupPageModule)
+  },
+  {
+    path: 'envios-disponibles',
+    loadChildren: () => import('./pages/envios-disponibles/envios-disponibles.module').then( m => m.EnviosDisponiblesPageModule)
   }
 
 ];

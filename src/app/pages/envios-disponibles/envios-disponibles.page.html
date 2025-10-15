@@ -1,8 +1,11 @@
 <ion-header>
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/jobs"></ion-back-button>
+    </ion-buttons>
     <ion-title>Envíos Disponibles</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="refreshJobs()">
+      <ion-button (click)="cargarEnvios()">
         <ion-icon name="refresh" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -11,7 +14,7 @@
   <ion-toolbar>
     <ion-searchbar 
       [(ngModel)]="searchTerm"
-      (ionInput)="filterJobs($event)"
+      (ionInput)="filterEnvios($event)"
       placeholder="Buscar por origen, destino o tipo de carga"
       animated>
     </ion-searchbar>
@@ -29,13 +32,13 @@
       <ion-icon name="cube-outline" class="empty-icon"></ion-icon>
       <h2>No hay envíos disponibles</h2>
       <p>Por el momento no hay envíos que coincidan con tu búsqueda.</p>
-      <ion-button (click)="refreshJobs()" fill="outline">
+      <ion-button (click)="cargarEnvios()" fill="outline">
         <ion-icon name="refresh" slot="start"></ion-icon>
         Actualizar
       </ion-button>
     </div>
 
-    <ion-card *ngFor="let envio of enviosFiltrados" (click)="viewJobDetails(envio)" class="envio-card">
+    <ion-card *ngFor="let envio of enviosFiltrados" (click)="verDetalle(envio)" class="envio-card">
       <ion-card-header>
         <div class="route-header">
           <div class="location">
@@ -104,7 +107,7 @@
         <!-- Botón Aplicar -->
         <ion-button 
           expand="block" 
-          (click)="applyForJob(envio, $event)"
+          (click)="aplicar(envio, $event)"
           class="aplicar-btn">
           <ion-icon name="send" slot="start"></ion-icon>
           Aplicar a este Envío

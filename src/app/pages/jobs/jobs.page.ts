@@ -1,106 +1,185 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { JobService } from '../../services';
-import { BackendJob, LoadingState } from '../../interfaces';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { JobApplicationService } from '../../services';
+import { Envio } from '../../interfaces/job-application.interface';
 
 @Component({
   selector: 'app-jobs',
   templateUrl: './jobs.page.html',
   styleUrls: ['./jobs.page.scss'],
 })
-export class JobsPage implements OnInit, OnDestroy {
-
-  jobs: BackendJob[] = [];
-  filteredJobs: BackendJob[] = [];
+export class JobsPage implements OnInit {
+  envios: Envio[] = [];
+  enviosFiltrados: Envio[] = [];
   searchTerm: string = '';
-  loadingState: LoadingState = { isLoading: false };
-  
-  private destroy$ = new Subject<void>();
-  private searchSubject = new Subject<string>();
+  isLoading: boolean = false;
 
-  constructor(private jobService: JobService) { }
+  constructor(
+    private jobApplicationService: JobApplicationService,
+    private router: Router,
+    private alertController: AlertController,
+    private loadingController: LoadingController
+  ) { }
 
   ngOnInit() {
-    this.initializeData();
-    this.setupSearch();
+    this.cargarEnvios();
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ionViewWillEnter() {
+    this.cargarEnvios();
   }
 
-  private initializeData(): void {
-    this.jobService.availableJobs$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(jobs => {
-        this.jobs = jobs;
-        this.applyCurrentFilter();
-      });
-
-    this.jobService.loadingState$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(loadingState => {
-        this.loadingState = loadingState;
-      });
-
-    this.jobService.getAvailableJobs().subscribe();
-  }
-
-  private setupSearch(): void {
-    this.searchSubject
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(searchTerm => {
-        this.searchTerm = searchTerm;
-        this.applyCurrentFilter();
-      });
-  }
-
-  filterJobs(event: any): void {
-    const searchTerm = event.target.value.toLowerCase();
-    this.searchSubject.next(searchTerm);
-  }
-
-  private applyCurrentFilter(): void {
-    if (this.searchTerm === '') {
-      this.filteredJobs = [...this.jobs];
-    } else {
-      this.filteredJobs = this.jobs.filter(job => 
-        job.titulo.toLowerCase().includes(this.searchTerm) ||
-        job.descripcion.toLowerCase().includes(this.searchTerm) ||
-        job.origen.toLowerCase().includes(this.searchTerm) ||
-        job.destino.toLowerCase().includes(this.searchTerm)
-      );
-    }
-  }
-
-  applyForJob(job: BackendJob): void {
-    if (this.loadingState.isLoading) return;
-
-    this.jobService.applyToJob(job.id).subscribe({
-      next: () => {
-        console.log('Application successful');
+  cargarEnvios() {
+    this.isLoading = true;
+    this.jobApplicationService.getEnviosDisponibles().subscribe({
+      next: (envios: Envio[]) => {
+        console.log('✅ Envíos cargados exitosamente:', envios);
+        this.envios = envios;
+        this.enviosFiltrados = [...this.envios];
+        this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Application failed:', error);
+      error: (error: any) => {
+        console.error('❌ Error cargando envíos:', error);
+        console.error('Status:', error.status);
+        console.error('Error detail:', error.error);
+        this.showAlert('Error', 'No se pudieron cargar los envíos disponibles.');
+        this.isLoading = false;
       }
     });
   }
 
-  viewJobDetails(job: BackendJob): void {
-    console.log('Ver detalles del trabajo:', job);
+  filterJobs(event: any) {
+    const searchValue = event.target.value?.toLowerCase() || '';
+    this.searchTerm = searchValue;
+
+    if (!searchValue) {
+      this.enviosFiltrados = [...this.envios];
+      return;
+    }
+
+    this.enviosFiltrados = this.envios.filter(envio => 
+      envio.origen.toLowerCase().includes(searchValue) ||
+      envio.destino.toLowerCase().includes(searchValue) ||
+      envio.tipo_carga.toLowerCase().includes(searchValue) ||
+      envio.descripcion?.toLowerCase().includes(searchValue)
+    );
   }
 
-  refreshJobs(): void {
-    this.jobService.getAvailableJobs().subscribe();
+  async applyForJob(envio: Envio, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Aplicar a Envío',
+      message: '¿Deseas agregar un mensaje con tu aplicación?',
+      inputs: [
+        {
+          name: 'mensaje',
+          type: 'textarea',
+          placeholder: 'Mensaje opcional...',
+          attributes: {
+            maxlength: 500
+          }
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Aplicar',
+          handler: (data) => {
+            this.enviarAplicacion(envio.id, data.mensaje);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
-  getPaymentText(job: BackendJob): string {
-    return `$${job.precio.toLocaleString()}`;
+  async enviarAplicacion(envioId: number, mensaje: string) {
+    const loading = await this.loadingController.create({
+      message: 'Enviando aplicación...'
+    });
+    await loading.present();
+
+    this.jobApplicationService.aplicarAEnvio({
+      envio_id: envioId,
+      mensaje: mensaje || undefined
+    }).subscribe({
+      next: async () => {
+        await loading.dismiss();
+        await this.showSuccessAlert('Aplicación enviada', 'Tu aplicación ha sido enviada exitosamente.');
+        this.cargarEnvios();
+      },
+      error: async (error: any) => {
+        await loading.dismiss();
+        const errorMsg = error?.error?.detail || 'No se pudo enviar la aplicación. Por favor intenta de nuevo.';
+        this.showAlert('Error', errorMsg);
+      }
+    });
+  }
+
+  refreshJobs() {
+    this.cargarEnvios();
+  }
+
+  doRefresh(event: any) {
+    this.jobApplicationService.getEnviosDisponibles().subscribe({
+      next: (envios: Envio[]) => {
+        this.envios = envios;
+        this.enviosFiltrados = [...this.envios];
+        event.target.complete();
+      },
+      error: (error: any) => {
+        console.error('Error refrescando:', error);
+        event.target.complete();
+      }
+    });
+  }
+
+  viewJobDetails(envio: Envio) {
+    this.router.navigate(['/envio-detalle', envio.id]);
+  }
+
+  getPaymentText(envio: Envio): string {
+    return `$${envio.valor.toLocaleString('es-CO')}`;
+  }
+
+  formatearFecha(fecha: string): string {
+    const date = new Date(fecha);
+    return date.toLocaleDateString('es-CO', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  }
+
+  calcularVolumen(envio: Envio): string {
+    const volumen = (envio.largo || 0) * (envio.ancho || 0) * (envio.alto || 0);
+    return volumen.toFixed(2);
+  }
+
+  async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  async showSuccessAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK'],
+      cssClass: 'success-alert'
+    });
+    await alert.present();
   }
 }

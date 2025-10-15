@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { StorageService } from '../../services/storage.service';
+import { environment } from '../../../environments/environment';
+import { from, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-active-job',
@@ -7,25 +11,71 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActiveJobPage implements OnInit {
 
-  activeJob = {
-    id: '1',
-    title: 'Transporte de Mercancía General',
-    company: 'Logística Express SA',
-    origin: 'Bogotá, Cundinamarca',
-    destination: 'Medellín, Antioquia',
-    distance: '416 km',
-    payment: 850000,
-    estimatedTime: '6h 30min',
-    progress: 45,
-    currentLocation: 'Puerto Boyacá, Boyacá'
-  };
-
+  activeJob: any = null;
+  isLoading: boolean = true;
   isNavigating: boolean = false;
   showJobInfo: boolean = true;
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) { }
 
   ngOnInit() {
+    this.cargarTrabajoActivo();
+  }
+
+  ionViewWillEnter() {
+    this.cargarTrabajoActivo();
+  }
+
+  cargarTrabajoActivo() {
+    this.isLoading = true;
+    
+    // Obtener el token y el user_id
+    from(Promise.all([
+      this.storage.get('auth_token'),
+      this.storage.get('current_user')
+    ])).pipe(
+      switchMap(([token, user]) => {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        });
+        
+        console.log('🔍 Buscando trabajos activos para conductor:', user.id);
+        
+        // Buscar envíos donde el conductor actual esté asignado
+        // Buscar en estados: asignado, en-proceso, en-transito
+        return this.http.get<any[]>(
+          `${environment.apiUrl}/envios?conductor_id=${user.id}`,
+          { headers }
+        );
+      })
+    ).subscribe({
+      next: (envios) => {
+        console.log('✅ Envíos obtenidos:', envios);
+        
+        // Filtrar solo los trabajos activos (asignado, en-proceso, en-transito)
+        const trabajosActivos = envios.filter(e => 
+          ['asignado', 'en-proceso', 'en-transito'].includes(e.estado)
+        );
+        
+        console.log('📦 Trabajos activos filtrados:', trabajosActivos);
+        
+        if (trabajosActivos && trabajosActivos.length > 0) {
+          this.activeJob = trabajosActivos[0]; // Tomar el primer trabajo activo
+        } else {
+          this.activeJob = null;
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('❌ Error cargando trabajo activo:', error);
+        this.activeJob = null;
+        this.isLoading = false;
+      }
+    });
   }
 
   startNavigation() {
